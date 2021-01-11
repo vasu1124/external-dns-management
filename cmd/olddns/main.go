@@ -30,16 +30,22 @@ import (
 	dnsprovider "github.com/gardener/external-dns-management/pkg/dns/provider"
 	dnssource "github.com/gardener/external-dns-management/pkg/dns/source"
 
-	_ "github.com/gardener/external-dns-management/pkg/controller/provider/alicloud"
-	_ "github.com/gardener/external-dns-management/pkg/controller/provider/aws"
-	_ "github.com/gardener/external-dns-management/pkg/controller/provider/azure"
-	_ "github.com/gardener/external-dns-management/pkg/controller/provider/cloudflare"
-	_ "github.com/gardener/external-dns-management/pkg/controller/provider/compound/controller"
-	_ "github.com/gardener/external-dns-management/pkg/controller/provider/google"
-	_ "github.com/gardener/external-dns-management/pkg/controller/provider/openstack"
+	_ "github.com/gardener/external-dns-management/pkg/controller/provider/alicloud/controller"
+	_ "github.com/gardener/external-dns-management/pkg/controller/provider/aws/controller"
+	_ "github.com/gardener/external-dns-management/pkg/controller/provider/azure/controller"
+	_ "github.com/gardener/external-dns-management/pkg/controller/provider/cloudflare/controller"
+	_ "github.com/gardener/external-dns-management/pkg/controller/provider/google/controller"
+	_ "github.com/gardener/external-dns-management/pkg/controller/provider/infoblox/controller"
+	_ "github.com/gardener/external-dns-management/pkg/controller/provider/openstack/controller"
 
+	_ "github.com/gardener/external-dns-management/pkg/controller/annotation/annotations"
+
+	_ "github.com/gardener/external-dns-management/pkg/controller/source/dnsentry"
 	_ "github.com/gardener/external-dns-management/pkg/controller/source/ingress"
 	_ "github.com/gardener/external-dns-management/pkg/controller/source/service"
+
+	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 )
 
 var Version string
@@ -49,7 +55,7 @@ func init() {
 		dnsprovider.PROVIDER_CLUSTER,
 		"providers",
 		"cluster to look for provider objects",
-	).Fallback(dnssource.TARGET_CLUSTER)
+	).Fallback(dnssource.TARGET_CLUSTER).MustRegister()
 
 	mappings.ForControllerGroup(dnsprovider.CONTROLLER_GROUP_DNS_CONTROLLERS).
 		Map(controller.CLUSTER_MAIN, dnssource.TARGET_CLUSTER).MustRegister()

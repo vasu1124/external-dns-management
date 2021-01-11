@@ -31,14 +31,14 @@ build-local:
 	    -ldflags "-X main.Version=$(VERSION)-$(shell git rev-parse HEAD)"\
 	    ./cmd/dns
 
-.PHONY: build-local-compound
-build-local-compound:
-	@CGO_ENABLED=1 GO111MODULE=on go build -o $(EXECUTABLE)-compound \
+.PHONY: build-local-old
+build-local-old:
+	@CGO_ENABLED=1 GO111MODULE=on go build -o $(EXECUTABLE)-old \
 	    -mod=vendor \
 	    -race \
 	    -gcflags="all=-N -l" \
 	    -ldflags "-X main.Version=$(VERSION)-$(shell git rev-parse HEAD)"\
-	    ./cmd/compound
+	    ./cmd/olddns
 
 .PHONY: release
 release:
